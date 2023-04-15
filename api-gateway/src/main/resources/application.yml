@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: api-gateway
+  sleuth:
+    sampler:
+      probability: '1.0'
+  cloud:
+    config:
+      import-check:
+        enabled: 'false'
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: currency-exchange
+          uri: lb://CURRENCY-EXCHANGE
+          predicates:
+            - Path=/currency-exchange/**
+        - id: currency-conversion
+          uri: lb://CURRENCY-CONVERSION
+          predicates:
+            - Path=/currency-conversion/**
+        - id: currency-conversion-feign
+          uri: lb://CURRENCY-CONVERSION
+          predicates:
+            - Path=/currency-conversion-feign/**
+        - id: currency-conversion-feign
+          uri: lb://CURRENCY-CONVERSION
+          predicates:
+            - Path=/currency-conversion-feign/**
+        - id: currency-conversion-new
+          uri: lb://CURRENCY-EXCHANGE
+          predicates:
+            - Path=/currency-conversion-new/**
+
+server:
+  port: '8765'
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
